@@ -56,6 +56,9 @@ namespace DotNetLogger.Sql
                 .HasKey(l => l.ID);
 
             modelBuilder.Entity<Log>()
+                .HasIndex(l => new { l.CreatedOn });
+
+            modelBuilder.Entity<Log>()
                 .HasIndex(l => new { l.Signature });
 
             modelBuilder.Entity<Log>()

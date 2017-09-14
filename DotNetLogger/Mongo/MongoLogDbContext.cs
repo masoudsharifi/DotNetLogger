@@ -21,5 +21,7 @@ namespace DotNetLogger.Mongo
             this.DatabaseContext = client.GetDatabase("DotNetLogger");
         }
         #endregion
+
+
     }
 }
