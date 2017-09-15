@@ -117,7 +117,7 @@ namespace DotNetLogger.Mongo
             return log;
         }
         /// <summary>
-        /// 
+        /// Find logs that contain the partialSearchString
         /// </summary>
         /// <param name="fromDate"></param>
         /// <param name="toDate"></param>

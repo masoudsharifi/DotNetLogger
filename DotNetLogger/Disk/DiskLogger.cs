@@ -96,9 +96,19 @@ namespace DotNetLogger.Disk
         /// <returns></returns>
         public Log FindByID(string id)
         {
-            Log log = null;
+            string path = AppDomain.CurrentDomain.BaseDirectory + $"DotNetLogger\\";
+            var files = Directory.GetFiles(path);
+            foreach(var file in files)
+            {
+                var logs = this.ReadLogFile(file);
+                var log = logs.Find(l => l.ID == id);
+                if(log != null)
+                {
+                    return log;
+                }
+            }
 
-            return log;
+            return null;
         }
         /// <summary>
         /// Find logs that contain the partialSearchString
@@ -106,6 +116,8 @@ namespace DotNetLogger.Disk
         /// <param name="fromDate"></param>
         /// <param name="toDate"></param>
         /// <param name="partialSearchString"></param>
+        /// <param name="type"></param>
+        /// <param name="origin"></param>
         /// <returns></returns>
         public IList<Log> FindLogs(DateTime fromDate, DateTime toDate, string partialSearchString = "", string type = "", string origin = "")
         {
