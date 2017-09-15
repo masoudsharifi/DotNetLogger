@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Text;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 using DotNetLogger.Models;
-using DotNetLogger.Interfaces;
-using MongoDB.Driver;
-using MongoDB.Bson;
+using DotNetLogger.Abstraction;
 
 namespace DotNetLogger.Mongo
 {
     /// <summary>
     /// This class will write logs to a MongoDb database
     /// </summary>
-    public class MongoDbLogger : ILogger
+    public class MongoDbLogger : Logger
     {
         #region Properties....
         private MongoLogDbContext _DbContext = null;
@@ -38,7 +38,7 @@ namespace DotNetLogger.Mongo
         /// <param name="error"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogError(string error, string logSignature = "", string caller = "")
+        internal override void LogError(string error, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -56,7 +56,7 @@ namespace DotNetLogger.Mongo
         /// <param name="ex"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogException(Exception ex, string logSignature = "", string caller = "")
+        internal override void LogException(Exception ex, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -74,7 +74,7 @@ namespace DotNetLogger.Mongo
         /// <param name="info"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogInfo(string info, string logSignature = "", string caller = "")
+        internal override void LogInfo(string info, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -92,7 +92,7 @@ namespace DotNetLogger.Mongo
         /// <param name="warning"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogWarning(string warning, string logSignature = "", string caller = "")
+        internal override void LogWarning(string warning, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -104,18 +104,18 @@ namespace DotNetLogger.Mongo
             };
             this._DbContext.Logs.InsertOne(log);
         }
-        /// <summary>
-        /// Finds a single log record by ID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public Log FindByID(string id)
-        {
-            var filter = Builders<Log>.Filter.Eq("_id", new ObjectId(id));
-            var log = this._DbContext.Logs.Find<Log>(filter).FirstOrDefault<Log>();
+        ///// <summary>
+        ///// Finds a single log record by ID
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <returns></returns>
+        //internal override Log FindByID(string id)
+        //{
+        //    var filter = Builders<Log>.Filter.Eq("_id", new ObjectId(id));
+        //    var log = this._DbContext.Logs.Find<Log>(filter).FirstOrDefault<Log>();
 
-            return log;
-        }
+        //    return log;
+        //}
         /// <summary>
         /// Find logs that contain the partialSearchString
         /// </summary>
@@ -125,7 +125,7 @@ namespace DotNetLogger.Mongo
         /// <param name="type"></param>
         /// <param name="origin"></param>
         /// <returns></returns>
-        public IList<Log> FindLogs(DateTime fromDate, DateTime toDate, string partialSearch = "", string type = "", string origin = "")
+        internal override IList<Log> FindLogs(DateTime fromDate, DateTime toDate, string partialSearch = "", string type = "", string origin = "")
         {
             QueryBuilder<Log> qb = new QueryBuilder<Log>();
             var gteQ = qb.GTE<DateTime>(l => l.CreatedOn, fromDate);

@@ -5,17 +5,24 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 //...Internal References
 using DotNetLogger.Models;
-using DotNetLogger.Interfaces;
 //...3rd Party References
 using Newtonsoft.Json;
+using DotNetLogger.Abstraction;
 
 namespace DotNetLogger.Disk
 {
     /// <summary>
     /// This class will write logs to disk
     /// </summary>
-    public class DiskLogger : ILogger
+    public class DiskLogger : Logger
     {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public DiskLogger()
+        {
+
+        }
         #region Public Methods.
         /// <summary>
         /// Logs an error message to the disk
@@ -23,7 +30,7 @@ namespace DotNetLogger.Disk
         /// <param name="error"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogError(string error, string logSignature = "", string caller = "")
+        internal override void LogError(string error, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -41,7 +48,7 @@ namespace DotNetLogger.Disk
         /// <param name="ex"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogException(Exception ex, string logSignature = "", string caller = "")
+        internal override void LogException(Exception ex, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -59,7 +66,7 @@ namespace DotNetLogger.Disk
         /// <param name="info"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogInfo(string info, string logSignature = "", string caller = "")
+        internal override void LogInfo(string info, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -77,7 +84,7 @@ namespace DotNetLogger.Disk
         /// <param name="warning"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogWarning(string warning, string logSignature = "", string caller = "")
+        internal override void LogWarning(string warning, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -89,27 +96,27 @@ namespace DotNetLogger.Disk
             };
             this.WriteToDisk(log);
         }
-        /// <summary>
-        /// Finds a single log record by ID
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        public Log FindByID(string id)
-        {
-            string path = AppDomain.CurrentDomain.BaseDirectory + $"DotNetLogger\\";
-            var files = Directory.GetFiles(path);
-            foreach(var file in files)
-            {
-                var logs = this.ReadLogFile(file);
-                var log = logs.Find(l => l.ID == id);
-                if(log != null)
-                {
-                    return log;
-                }
-            }
+        ///// <summary>
+        ///// Finds a single log record by ID
+        ///// </summary>
+        ///// <param name="id"></param>
+        ///// <returns></returns>
+        //internal override Log FindByID(string id)
+        //{
+        //    string path = AppDomain.CurrentDomain.BaseDirectory + $"DotNetLogger\\";
+        //    var files = Directory.GetFiles(path);
+        //    foreach(var file in files)
+        //    {
+        //        var logs = this.ReadLogFile(file);
+        //        var log = logs.Find(l => l.ID == id);
+        //        if(log != null)
+        //        {
+        //            return log;
+        //        }
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
         /// <summary>
         /// Find logs that contain the partialSearchString
         /// </summary>
@@ -119,7 +126,7 @@ namespace DotNetLogger.Disk
         /// <param name="type"></param>
         /// <param name="origin"></param>
         /// <returns></returns>
-        public IList<Log> FindLogs(DateTime fromDate, DateTime toDate, string partialSearchString = "", string type = "", string origin = "")
+        internal override IList<Log> FindLogs(DateTime fromDate, DateTime toDate, string partialSearchString = "", string type = "", string origin = "")
         {
             long startNumber = -1;
             string fstr = fromDate.ToString("yyyyMMdd");

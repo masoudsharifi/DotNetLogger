@@ -1,15 +1,24 @@
-﻿using DotNetLogger.Interfaces;
-using DotNetLogger.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
+using DotNetLogger.Models;
+using DotNetLogger.Abstraction;
+
 namespace DotNetLogger
 {
+    /// <summary>
+    /// Log controller
+    /// </summary>
     public class LogController
     {
-        private ILogger _Logger = null;
-        public LogController(ILogger logger)
+        private Logger _Logger = null;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="logger"></param>
+        public LogController(Logger logger)
         {
             this._Logger = logger;
         }
