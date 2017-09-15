@@ -23,7 +23,7 @@ namespace DotNetLogger.Disk
         /// <param name="error"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogError(string error, string logSignature = "", [CallerMemberName] string caller = "")
+        public void LogError(string error, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -41,7 +41,7 @@ namespace DotNetLogger.Disk
         /// <param name="ex"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogException(Exception ex, string logSignature = "", [CallerMemberName] string caller = "")
+        public void LogException(Exception ex, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -59,7 +59,7 @@ namespace DotNetLogger.Disk
         /// <param name="info"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogInfo(string info, string logSignature = "", [CallerMemberName] string caller = "")
+        public void LogInfo(string info, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -77,7 +77,7 @@ namespace DotNetLogger.Disk
         /// <param name="warning"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogWarning(string warning, string logSignature = "", [CallerMemberName] string caller = "")
+        public void LogWarning(string warning, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -89,7 +89,17 @@ namespace DotNetLogger.Disk
             };
             this.WriteToDisk(log);
         }
+        /// <summary>
+        /// Finds a single log record by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Log FindByID(string id)
+        {
+            Log log = null;
 
+            return log;
+        }
         /// <summary>
         /// Find logs that contain the partialSearchString
         /// </summary>
@@ -119,8 +129,8 @@ namespace DotNetLogger.Disk
                     var foundLogs = fileLogs.FindAll(l => 
                                                         l.CreatedOn >= fromDate &&
                                                         l.CreatedOn <= toDate &&
-                                                        (partialSearchString == "" || l.Signature.Contains(partialSearchString) &&
-                                                        (partialSearchString == "" || l.Message.Contains(partialSearchString) &&
+                                                        (partialSearchString == "" || l.Signature.Contains(partialSearchString)) &&
+                                                        (partialSearchString == "" || l.Message.Contains(partialSearchString)) &&
                                                         (type == "" || l.Type == type) &&
                                                         (origin == "" || l.Origin == origin)
                                                      );

@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using DotNetLogger.Models;
 using DotNetLogger.Interfaces;
 using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace DotNetLogger.Mongo
 {
@@ -37,7 +38,7 @@ namespace DotNetLogger.Mongo
         /// <param name="error"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogError(string error, string logSignature = "", [CallerMemberName] string caller = "")
+        public void LogError(string error, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -55,7 +56,7 @@ namespace DotNetLogger.Mongo
         /// <param name="ex"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogException(Exception ex, string logSignature = "", [CallerMemberName] string caller = "")
+        public void LogException(Exception ex, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -73,7 +74,7 @@ namespace DotNetLogger.Mongo
         /// <param name="info"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogInfo(string info, string logSignature = "", [CallerMemberName] string caller = "")
+        public void LogInfo(string info, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -91,7 +92,7 @@ namespace DotNetLogger.Mongo
         /// <param name="warning"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        public void LogWarning(string warning, string logSignature = "", [CallerMemberName] string caller = "")
+        public void LogWarning(string warning, string logSignature = "", string caller = "")
         {
             var log = new Log
             {
@@ -103,8 +104,28 @@ namespace DotNetLogger.Mongo
             };
             this._DbContext.Logs.InsertOne(log);
         }
+        /// <summary>
+        /// Finds a single log record by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Log FindByID(string id)
+        {
+            var filter = Builders<Log>.Filter.Eq("_id", new ObjectId(id));
+            var log = this._DbContext.Logs.Find<Log>(filter).FirstOrDefault<Log>();
 
-        public List<Log> FindLogs(DateTime fromDate, DateTime toDate, string partialSearch = "", string type = "", string origin = "")
+            return log;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fromDate"></param>
+        /// <param name="toDate"></param>
+        /// <param name="partialSearch"></param>
+        /// <param name="type"></param>
+        /// <param name="origin"></param>
+        /// <returns></returns>
+        public IList<Log> FindLogs(DateTime fromDate, DateTime toDate, string partialSearch = "", string type = "", string origin = "")
         {
             QueryBuilder<Log> qb = new QueryBuilder<Log>();
             var gteQ = qb.GTE<DateTime>(l => l.CreatedOn, fromDate);

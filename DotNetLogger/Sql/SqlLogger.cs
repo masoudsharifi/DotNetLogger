@@ -41,7 +41,7 @@ namespace DotNetLogger.Sql
         /// <param name="ex"></param>
         /// <param name="logSignature">This is a unique string that can be used to identify these types of exceptiosn (e.g. Sql Connection Exception)</param>
         /// <param name="caller">This will be automatically </param>
-        public void LogException(Exception ex, string logSignature="", [CallerMemberName] string caller = "")
+        public void LogException(Exception ex, string logSignature="", string caller = "")
         {
             using (SqlLogDbContext dbContext = new SqlLogDbContext(this._ConnectionString))
             {
@@ -64,7 +64,7 @@ namespace DotNetLogger.Sql
         /// <param name="error"></param>
         /// <param name="logSignature">This is a unique string that can be used to identify these types of exceptiosn (e.g. Sql Connection Exception)</param>
         /// <param name="caller"></param>
-        public void LogError(string error, string logSignature = "", [CallerMemberName] string caller = "")
+        public void LogError(string error, string logSignature = "", string caller = "")
         {
             using (SqlLogDbContext dbContext = new SqlLogDbContext(this._ConnectionString))
             {
@@ -87,7 +87,7 @@ namespace DotNetLogger.Sql
         /// <param name="info"></param>
         /// <param name="logSignature">This is a unique string that can be used to identify these types of exceptiosn (e.g. Sql Connection Exception)</param>
         /// <param name="caller"></param>
-        public void LogInfo(string info, string logSignature = "", [CallerMemberName] string caller = "")
+        public void LogInfo(string info, string logSignature = "", string caller = "")
         {
             using (SqlLogDbContext dbContext = new SqlLogDbContext(this._ConnectionString))
             {
@@ -110,7 +110,7 @@ namespace DotNetLogger.Sql
         /// <param name="warning"></param>
         /// <param name="logSignature">This is a unique string that can be used to identify these types of exceptiosn (e.g. Sql Connection Exception)</param>
         /// <param name="caller"></param>
-        public void LogWarning(string warning, string logSignature = "", [CallerMemberName] string caller = "")
+        public void LogWarning(string warning, string logSignature = "", string caller = "")
         {
             using (SqlLogDbContext dbContext = new SqlLogDbContext(this._ConnectionString))
             {
@@ -127,7 +127,21 @@ namespace DotNetLogger.Sql
                 dbContext.SaveChangesAsync();
             }
         }
+        /// <summary>
+        /// Finds a single log record by ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public Log FindByID(string id)
+        {
+            Log log = null;
+            using (SqlLogDbContext dbContext = new SqlLogDbContext(this._ConnectionString))
+            {
+                log = dbContext.Logs.Where(l => l.ID == id).FirstOrDefault();
+            }
 
+            return log;
+        }
         /// <summary>
         /// Find logs that is returned by the searchExpression
         /// </summary>
