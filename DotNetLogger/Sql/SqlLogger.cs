@@ -1,21 +1,29 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
+using System.Linq.Expressions;
 using System.Collections.Generic;
-
-using DotNetLogger.Interfaces;
 using System.Runtime.CompilerServices;
+//...Internal References
 using DotNetLogger.Sql;
+using DotNetLogger.Models;
+using DotNetLogger.Interfaces;
 
-namespace DotNetLogger
+namespace DotNetLogger.Sql
 {
+    /// <summary>
+    /// This class will write logs to a SQL database
+    /// </summary>
     public class SqlLogger : ILogger
     {
+        #region Properties....
         /// <summary>
         /// Connection string to the SQL database
         /// </summary>
         private string _ConnectionString { get; set; }
+        #endregion
 
-        #region Constructors
+        #region Constructors..
         /// <summary>
         /// Constructor
         /// </summary>
@@ -26,6 +34,7 @@ namespace DotNetLogger
         }
         #endregion
 
+        #region Public Methods
         /// <summary>
         /// Logs an exception object to the SQL log database
         /// </summary>
@@ -118,5 +127,24 @@ namespace DotNetLogger
                 dbContext.SaveChangesAsync();
             }
         }
+
+        /// <summary>
+        /// Find logs that is returned by the searchExpression
+        /// </summary>
+        /// <param name="searchExpression"></param>
+        /// <returns></returns>
+        public IList<Log> FindLogs(Expression<Func<Log, bool>> searchExpression)
+        {
+            List<Log> logs = new List<Log>();
+            using (SqlLogDbContext dbContext = new SqlLogDbContext(this._ConnectionString))
+            {
+                logs = dbContext.Logs
+                            .Where(searchExpression)
+                            .ToList<Log>();                            
+            }
+
+            return logs;
+        }
+        #endregion
     }
 }

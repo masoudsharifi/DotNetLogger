@@ -8,23 +8,32 @@ using DotNetLogger.Models;
 
 namespace DotNetLogger.Sql
 {
+    /// <summary>
+    /// This is the SQL Log DB Context
+    /// </summary>
     public class SqlLogDbContext : DbContext
     {
-        #region Properties 
+        #region Properties.....
         private string _DbConnnectionString = String.Empty;
+        /// <summary>
+        /// Logs entity
+        /// </summary>
         public DbSet<Log> Logs { get; set;}
         #endregion
 
-        #region Constructors 
+        #region Constructors...        
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="connectionString"></param>
         public SqlLogDbContext(string connectionString) : base()
         {
             this._DbConnnectionString = connectionString;
-
             try
             {
                 Database.EnsureCreated();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 using (StreamWriter writer = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "DotNetLogger.txt", true))
                 {
@@ -35,6 +44,7 @@ namespace DotNetLogger.Sql
         }
         #endregion
 
+        #region Overrides......
         /// <summary>
         /// 
         /// </summary>
@@ -64,5 +74,24 @@ namespace DotNetLogger.Sql
             modelBuilder.Entity<Log>()
                 .HasIndex(l => new { l.Message });
         }
+        #endregion
+
+        #region Private Methods
+        private void CreateDb()
+        {
+            try
+            {
+                Database.EnsureCreated();
+            }
+            catch (Exception ex)
+            {
+                using (StreamWriter writer = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + "DotNetLogger.txt", true))
+                {
+                    writer.WriteLine($"An error occured while initializing the database for the DotNetLogger:{Environment.NewLine}{ex.ToString()}");
+                    writer.Close();
+                }
+            }
+        }
+        #endregion
     }
 }
