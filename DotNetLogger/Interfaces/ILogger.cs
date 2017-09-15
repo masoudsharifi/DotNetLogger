@@ -37,6 +37,20 @@ namespace DotNetLogger.Interfaces
         /// <param name="warning"></param>
         /// <param name="logSignature"></param>
         /// <param name="caller"></param>
-        void LogWarning(string warning, string logSignature = "", [CallerMemberName] string caller = "");        
+        void LogWarning(string warning, string logSignature = "", [CallerMemberName] string caller = "");
+        /// <summary>
+        /// Finds a log record by its ID
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        Log FindByID(string id);
+        /// <summary>
+        /// Finds logs record for a time range that contain a string in their signature or message field
+        /// </summary>
+        /// <param name="fromDate"></param>
+        /// <param name="toDate"></param>
+        /// <param name="partialSearchString"></param>
+        /// <returns></returns>
+        IList<Log> FindLogs(DateTime fromDate, DateTime toDate, string partialSearchString, string type, string origin);
     }
 }

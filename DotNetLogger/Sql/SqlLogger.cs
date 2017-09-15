@@ -131,15 +131,29 @@ namespace DotNetLogger.Sql
         /// <summary>
         /// Find logs that is returned by the searchExpression
         /// </summary>
-        /// <param name="searchExpression"></param>
+        /// <param name="fromDate"></param>
+        /// <param name="toDate"></param>
+        /// <param name="partialSearchString"></param>
+        /// <param name="type"></param>
+        /// <param name="origin"></param>
         /// <returns></returns>
-        public IList<Log> FindLogs(Expression<Func<Log, bool>> searchExpression)
+        public IList<Log> FindLogs(DateTime fromDate, DateTime toDate, string partialSearchString = "", string type = "", string origin = "")
         {
             List<Log> logs = new List<Log>();
             using (SqlLogDbContext dbContext = new SqlLogDbContext(this._ConnectionString))
             {
                 logs = dbContext.Logs
-                            .Where(searchExpression)
+                            .Where(
+                                l => l.CreatedOn >= fromDate &&
+                                     l.CreatedOn <= toDate &&
+                                     (partialSearchString == null || 
+                                      partialSearchString == String.Empty ||
+                                      l.Signature.Contains(partialSearchString) ||
+                                      l.Message.Contains(partialSearchString)
+                                     ) &&
+                                     (type == "" || l.Type == type) &&
+                                     (origin == "" || l.Origin == origin)
+                            )
                             .ToList<Log>();                            
             }
 

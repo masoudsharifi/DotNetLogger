@@ -104,13 +104,15 @@ namespace DotNetLogger.Mongo
             this._DbContext.Logs.InsertOne(log);
         }
 
-        public List<Log> FindLogs(DateTime fromDate, DateTime toDate, string partialSearch)
+        public List<Log> FindLogs(DateTime fromDate, DateTime toDate, string partialSearch = "", string type = "", string origin = "")
         {
             QueryBuilder<Log> qb = new QueryBuilder<Log>();
             var gteQ = qb.GTE<DateTime>(l => l.CreatedOn, fromDate);
             var lteQ = qb.LTE<DateTime>(l => l.CreatedOn, toDate);
-            var sigQ = qb.Where(l => l.Signature.Contains(partialSearch));
-            var msgQ = qb.Where(l => l.Message.Contains(partialSearch));
+            var sigQ = qb.Where(l => partialSearch == "" || l.Signature.Contains(partialSearch));
+            var msgQ = qb.Where(l => partialSearch == "" || l.Message.Contains(partialSearch));
+            var typeQ = qb.Where(l => type == "" || l.Type.Equals(type));
+            var orgQ = qb.Where(l => origin == "" || l.Origin.Equals(origin));
             qb.And(new IMongoQuery[] { gteQ, lteQ, sigQ, msgQ });
 
             var logs = this._DbContext.Logs.Find(qb.ToString()).ToList<Log>();

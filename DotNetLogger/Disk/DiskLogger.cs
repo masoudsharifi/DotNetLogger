@@ -97,7 +97,7 @@ namespace DotNetLogger.Disk
         /// <param name="toDate"></param>
         /// <param name="partialSearchString"></param>
         /// <returns></returns>
-        public IList<Log> FindLogs(DateTime fromDate, DateTime toDate, string partialSearchString)
+        public IList<Log> FindLogs(DateTime fromDate, DateTime toDate, string partialSearchString = "", string type = "", string origin = "")
         {
             long startNumber = -1;
             string fstr = fromDate.ToString("yyyyMMdd");
@@ -116,7 +116,14 @@ namespace DotNetLogger.Disk
                 if (File.Exists(filePath))
                 {
                     var fileLogs = this.ReadLogFile(filePath);
-                    var foundLogs = fileLogs.FindAll(l => l.Message.Contains(partialSearchString));
+                    var foundLogs = fileLogs.FindAll(l => 
+                                                        l.CreatedOn >= fromDate &&
+                                                        l.CreatedOn <= toDate &&
+                                                        (partialSearchString == "" || l.Signature.Contains(partialSearchString) &&
+                                                        (partialSearchString == "" || l.Message.Contains(partialSearchString) &&
+                                                        (type == "" || l.Type == type) &&
+                                                        (origin == "" || l.Origin == origin)
+                                                     );
                     if(foundLogs != null)
                     {
                         for(int j = 0;j < foundLogs.Count; j++)
