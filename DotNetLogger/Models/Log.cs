@@ -14,9 +14,8 @@ namespace DotNetLogger.Models
         /// <summary>
         /// Unique identifier
         /// </summary>
-        [Required]
         [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string ID { get; set; }
+        public string Id { get; set; }
 
         /// <summary>
         /// This is the type of log entry (Exception, Error, Warning, Information)

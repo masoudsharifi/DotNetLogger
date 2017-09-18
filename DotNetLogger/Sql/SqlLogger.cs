@@ -47,7 +47,7 @@ namespace DotNetLogger.Sql
             {
                 dbContext.Logs.Add(new Models.Log
                 {
-                    ID = Guid.NewGuid().ToString(),
+                    Id = Guid.NewGuid().ToString(),
                     Type = "Exception",
                     Origin = caller,
                     Message = ex.ToString(),
@@ -55,7 +55,7 @@ namespace DotNetLogger.Sql
                     Signature = logSignature
                 });
 
-                dbContext.SaveChangesAsync();
+                dbContext.SaveChanges();
             }
         }
         /// <summary>
@@ -70,7 +70,7 @@ namespace DotNetLogger.Sql
             {
                 dbContext.Logs.Add(new Models.Log
                 {
-                    ID = Guid.NewGuid().ToString(),
+                    Id = Guid.NewGuid().ToString(),
                     Type = "Error",
                     Origin = caller,
                     Message = error,
@@ -78,7 +78,7 @@ namespace DotNetLogger.Sql
                     Signature = logSignature
                 });
 
-                dbContext.SaveChangesAsync();
+                dbContext.SaveChanges();
             }
         }
         /// <summary>
@@ -93,7 +93,7 @@ namespace DotNetLogger.Sql
             {
                 dbContext.Logs.Add(new Models.Log
                 {
-                    ID = Guid.NewGuid().ToString(),
+                    Id = Guid.NewGuid().ToString(),
                     Type = "Information",
                     Origin = caller,
                     Message = info,
@@ -101,7 +101,7 @@ namespace DotNetLogger.Sql
                     Signature = logSignature
                 });
 
-                dbContext.SaveChangesAsync();
+                dbContext.SaveChanges();
             }
         }
         /// <summary>
@@ -116,7 +116,7 @@ namespace DotNetLogger.Sql
             {
                 dbContext.Logs.Add(new Models.Log
                 {
-                    ID = Guid.NewGuid().ToString(),
+                    Id = Guid.NewGuid().ToString(),
                     Type = "Warning",
                     Origin = caller,
                     Message = warning,
@@ -124,24 +124,10 @@ namespace DotNetLogger.Sql
                     Signature = logSignature
                 });
 
-                dbContext.SaveChangesAsync();
+                dbContext.SaveChanges();
             }
         }
-        ///// <summary>
-        ///// Finds a single log record by ID
-        ///// </summary>
-        ///// <param name="id"></param>
-        ///// <returns></returns>
-        //public Log FindByID(string id)
-        //{
-        //    Log log = null;
-        //    using (SqlLogDbContext dbContext = new SqlLogDbContext(this._ConnectionString))
-        //    {
-        //        log = dbContext.Logs.Where(l => l.ID == id).FirstOrDefault();
-        //    }
-
-        //    return log;
-        //}
+        
         /// <summary>
         /// Find logs that is returned by the searchExpression
         /// </summary>

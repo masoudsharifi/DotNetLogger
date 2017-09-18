@@ -8,7 +8,7 @@
     <licenseUrl>https://github.com/masoudsharifi/DotNetLogger/blob/master/LICENSE</licenseUrl>
     <projectUrl>https://www.github.com/masoudsharifi/GotNetLogger</projectUrl>
     <iconUrl>http://ICON_URL_HERE_OR_DELETE_THIS_LINE</iconUrl>
-    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <description>This is a library that provides logging for .NET Core 2.0 applications</description>
     <releaseNotes>This is the initial release of this package.</releaseNotes>
     <copyright>Copyright 2017</copyright>
@@ -23,6 +23,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="bin\Release\**" target="lib\DotNetLogger-1.0.0\**" />
+    <file src="DotNetLogger\bin\Release\netcoreapp2.0\ReadMe.txt" target=""/>
+    <file src="DotNetLogger\bin\Release\netcoreapp2.0\*.*" target="lib\DotNetLogger-1.0.0\netcoreapp2.0\*.*" />
   </files>
 </package>

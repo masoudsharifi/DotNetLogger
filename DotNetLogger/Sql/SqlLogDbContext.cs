@@ -63,7 +63,7 @@ namespace DotNetLogger.Sql
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Log>()
-                .HasKey(l => l.ID);
+                .HasKey(l => l.Id);
 
             modelBuilder.Entity<Log>()
                 .HasIndex(l => new { l.CreatedOn });

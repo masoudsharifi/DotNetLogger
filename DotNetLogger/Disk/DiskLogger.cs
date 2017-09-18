@@ -34,7 +34,7 @@ namespace DotNetLogger.Disk
         {
             var log = new Log
             {
-                ID = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid().ToString(),
                 Type = "Error",
                 CreatedOn = DateTime.UtcNow,
                 Message = error,
@@ -53,7 +53,7 @@ namespace DotNetLogger.Disk
         {
             var log = new Log
             {
-                ID = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid().ToString(),
                 Type = "Exception",
                 CreatedOn = DateTime.UtcNow,
                 Message = ex.ToString(),
@@ -72,7 +72,7 @@ namespace DotNetLogger.Disk
         {
             var log = new Log
             {
-                ID = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid().ToString(),
                 Type = "Information",
                 CreatedOn = DateTime.UtcNow,
                 Message = info,
@@ -91,7 +91,7 @@ namespace DotNetLogger.Disk
         {
             var log = new Log
             {
-                ID = Guid.NewGuid().ToString(),
+                Id = Guid.NewGuid().ToString(),
                 Type = "Warning",
                 CreatedOn = DateTime.UtcNow,
                 Message = warning,

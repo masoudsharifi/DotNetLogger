@@ -2,6 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseUrl>https://github.com/masoudsharifi/DotNetLogger/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://www.github.com/masoudsharifi/GotNetLogger</PackageProjectUrl>
+    <RepositoryUrl>https://www.github.com/masoudsharifi/GotNetLogger</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
