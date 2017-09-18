@@ -6,8 +6,9 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseUrl>https://github.com/masoudsharifi/DotNetLogger/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://www.github.com/masoudsharifi/GotNetLogger</PackageProjectUrl>
-    <RepositoryUrl>https://www.github.com/masoudsharifi/GotNetLogger</RepositoryUrl>
+    <RepositoryUrl>https://github.com/masoudsharifi/DotNetLogger</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
+    <PackageTags>.Net Log Logger Logging DotNet</PackageTags>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
