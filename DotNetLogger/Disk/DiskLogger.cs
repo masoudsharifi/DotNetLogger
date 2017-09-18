@@ -34,6 +34,7 @@ namespace DotNetLogger.Disk
         {
             var log = new Log
             {
+                ID = Guid.NewGuid().ToString(),
                 Type = "Error",
                 CreatedOn = DateTime.UtcNow,
                 Message = error,
@@ -52,6 +53,7 @@ namespace DotNetLogger.Disk
         {
             var log = new Log
             {
+                ID = Guid.NewGuid().ToString(),
                 Type = "Exception",
                 CreatedOn = DateTime.UtcNow,
                 Message = ex.ToString(),
@@ -70,6 +72,7 @@ namespace DotNetLogger.Disk
         {
             var log = new Log
             {
+                ID = Guid.NewGuid().ToString(),
                 Type = "Information",
                 CreatedOn = DateTime.UtcNow,
                 Message = info,
@@ -88,6 +91,7 @@ namespace DotNetLogger.Disk
         {
             var log = new Log
             {
+                ID = Guid.NewGuid().ToString(),
                 Type = "Warning",
                 CreatedOn = DateTime.UtcNow,
                 Message = warning,
@@ -148,8 +152,9 @@ namespace DotNetLogger.Disk
                     var foundLogs = fileLogs.FindAll(l => 
                                                         l.CreatedOn >= fromDate &&
                                                         l.CreatedOn <= toDate &&
-                                                        (partialSearchString == "" || l.Signature.Contains(partialSearchString)) &&
-                                                        (partialSearchString == "" || l.Message.Contains(partialSearchString)) &&
+                                                        (partialSearchString == "" ||
+                                                         l.Signature.Contains(partialSearchString) || 
+                                                         l.Message.Contains(partialSearchString)) &&
                                                         (type == "" || l.Type == type) &&
                                                         (origin == "" || l.Origin == origin)
                                                      );
@@ -170,12 +175,29 @@ namespace DotNetLogger.Disk
         #region Private Methods
         private void WriteToDisk(Log log)
         {
+            var addComma = true;
             var dt = DateTime.Now;
+            var path = AppDomain.CurrentDomain.BaseDirectory + "DotNetLogger";
             var filename = dt.ToString("yyyyMMdd");
             var serializedLog = JsonConvert.SerializeObject(log);
-            using (StreamWriter writer = new StreamWriter(AppDomain.CurrentDomain.BaseDirectory + $"DotNetLogger\\{filename}", true))
+            if(!Directory.Exists(path))
             {                
-                writer.WriteLineAsync(serializedLog);
+                Directory.CreateDirectory(path);
+            }
+            if(!File.Exists($"{path}\\{filename}"))
+            {
+                addComma = false;
+            }
+            using (StreamWriter writer = new StreamWriter($"{path}\\{filename}", true))
+            {
+                if (addComma)
+                {
+                    writer.WriteLineAsync($",{serializedLog}");
+                }
+                else
+                {
+                    writer.WriteLineAsync(serializedLog);
+                }
             }
         }
 
@@ -188,6 +210,10 @@ namespace DotNetLogger.Disk
                 reader.Close();
             }
 
+            if(content.StartsWith(","))
+            {
+                content = content.Substring(1);
+            }
             List<Log> logs = JsonConvert.DeserializeObject<List<Log>>(content);
             return logs;
         }
